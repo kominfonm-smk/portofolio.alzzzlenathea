@@ -1,0 +1,3002 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Muhammad Ali Sallahudin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #8b5cf6;
+            --secondary-color: #ec4899;
+            --accent-color: #22d3ee;
+            --bg-color: #0a0a0a;
+            --text-color: white;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.5s ease;
+        }
+
+        /* Theme variations */
+        body.theme-ocean {
+            --primary-color: #06b6d4;
+            --secondary-color: #3b82f6;
+            --accent-color: #8b5cf6;
+        }
+
+        body.theme-sunset {
+            --primary-color: #f97316;
+            --secondary-color: #dc2626;
+            --accent-color: #fbbf24;
+        }
+
+        body.theme-forest {
+            --primary-color: #10b981;
+            --secondary-color: #059669;
+            --accent-color: #84cc16;
+        }
+
+        body.theme-rose {
+            --primary-color: #ec4899;
+            --secondary-color: #f43f5e;
+            --accent-color: #fb7185;
+        }
+
+        body.theme-galaxy {
+            --primary-color: #8b5cf6;
+            --secondary-color: #6366f1;
+            --accent-color: #a78bfa;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 1001;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 10px;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 50px;
+            overflow: hidden;
+        }
+
+        .theme-switcher.expanded {
+            max-height: 400px;
+        }
+
+        .theme-toggle-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-options {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .theme-btn.active {
+            border-color: white;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .theme-btn.default {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        }
+
+        .theme-btn.ocean {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+        }
+
+        .theme-btn.sunset {
+            background: linear-gradient(135deg, #f97316, #dc2626);
+        }
+
+        .theme-btn.forest {
+            background: linear-gradient(135deg, #10b981, #84cc16);
+        }
+
+        .theme-btn.rose {
+            background: linear-gradient(135deg, #ec4899, #f43f5e);
+        }
+
+        .theme-btn.galaxy {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+        }
+
+        /* Social Media Popup */
+        .social-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .social-popup.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .popup-content {
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid var(--primary-color);
+            border-radius: 25px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-close:hover {
+            background: var(--primary-color);
+            transform: rotate(90deg);
+        }
+
+        .popup-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .popup-icon.whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+        }
+
+        .popup-icon.instagram {
+            background: linear-gradient(135deg, #E1306C, #FD1D1D, #F77737, #FCAF45);
+        }
+
+        .popup-icon.tiktok {
+            background: linear-gradient(135deg, #000000, #EE1D52, #69C9D0);
+        }
+
+        .popup-icon.telegram {
+            background: linear-gradient(135deg, #0088cc, #229ED9);
+        }
+
+        .popup-content h3 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .popup-content p {
+            color: #a1a1aa;
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .popup-info {
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .popup-info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .popup-info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .popup-info-item i {
+            color: var(--primary-color);
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .popup-info-item span {
+            color: #e2e8f0;
+            font-size: 1.1rem;
+        }
+
+        .popup-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .popup-btn {
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .popup-btn.primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .popup-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .popup-btn.secondary {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .popup-btn.secondary:hover {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        /* Project Demo Popup */
+        .project-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .project-popup.active {
+            display: flex;
+        }
+
+        .project-popup-content {
+            background: rgba(20, 20, 20, 0.98);
+            border: 2px solid var(--primary-color);
+            border-radius: 25px;
+            width: 100%;
+            max-width: 1400px;
+            height: 90vh;
+            max-height: 900px;
+            position: relative;
+            animation: slideUp 0.4s ease;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .project-popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: rgba(10, 10, 10, 0.8);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            flex-shrink: 0;
+        }
+
+        .project-popup-title {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .project-popup-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .zoom-controls {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 10px;
+            padding: 0.5rem;
+        }
+
+        .zoom-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            background: rgba(139, 92, 246, 0.2);
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .zoom-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .zoom-level {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+            padding: 0 0.5rem;
+            display: flex;
+            align-items: center;
+            min-width: 45px;
+            justify-content: center;
+        }
+
+        .project-popup-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-popup-close:hover {
+            background: var(--primary-color);
+            transform: rotate(90deg);
+        }
+
+        .project-demo-container {
+            flex: 1;
+            background: rgba(10, 10, 10, 0.8);
+            position: relative;
+            overflow: auto;
+            border-radius: 0 0 23px 23px;
+        }
+
+        .project-iframe-wrapper {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transform-origin: center center;
+            transition: transform 0.3s ease;
+        }
+
+        .project-iframe {
+            width: 100%;
+            max-width: 1200px;
+            height: 800px;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            background: white;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(34, 211, 238, 0.15) 0%, transparent 50%);
+            z-index: -2;
+            animation: backgroundPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes backgroundPulse {
+            0% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 1.5rem 5%;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #a1a1aa;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        nav a:hover::before {
+            left: 100%;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--primary-color);
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
+        }
+
+        /* Section Styles */
+        .section {
+            min-height: 100vh;
+            padding: 6rem 5% 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Home Section */
+        .home-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .text-content h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease-in-out infinite alternate;
+            line-height: 1.1;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            100% {
+                filter: hue-rotate(45deg);
+            }
+        }
+
+        .text-content p {
+            font-size: 1.4rem;
+            color: #a1a1aa;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        .text-content .highlight {
+            color: var(--primary-color);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.3rem 2.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: none;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.5);
+        }
+
+        .cta-button:hover::before {
+            left: 0;
+        }
+
+        .profile-image {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-circle {
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            animation: floatProfile 8s ease-in-out infinite, rotate 25s linear infinite;
+            position: relative;
+            box-shadow:
+                0 50px 100px rgba(139, 92, 246, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .profile-circle::before {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            border-radius: 50%;
+            z-index: -1;
+            animation: rotate 15s linear infinite reverse;
+        }
+
+        .profile-circle img {
+            width: 92%;
+            height: 92%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.4s ease;
+        }
+
+        .profile-circle:hover img {
+            transform: scale(1.05);
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes floatProfile {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .social-links a {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(139, 92, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .social-links a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .social-links a:hover::before {
+            width: 120%;
+            height: 120%;
+        }
+
+        .social-links a:hover {
+            color: white;
+            transform: translateY(-8px) scale(1.15);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+        }
+
+        .social-links a i {
+            font-size: 1.3rem;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            position: relative;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: #a1a1aa;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* About Section */
+        .about-content {
+            text-align: center;
+        }
+
+        .quote {
+            font-style: italic;
+            color: var(--primary-color);
+            margin-bottom: 3rem;
+            font-size: 1.6rem;
+            font-weight: 400;
+            position: relative;
+            background: rgba(139, 92, 246, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .about-text {
+            font-size: 1.2rem;
+            color: #a1a1aa;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 2;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .skill-icon {
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 25px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+            transition: left 0.5s ease;
+        }
+
+        .skill-icon:hover::before {
+            left: 0;
+        }
+
+        .skill-icon:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        }
+
+        .skill-icon i {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .skill-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .skill-card {
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 25px;
+            padding: 2.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .skill-card:hover {
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.2);
+        }
+
+        .skill-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .skill-card h3 i {
+            margin-right: 0.5rem;
+        }
+
+        .skill-card p {
+            color: #a1a1aa;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+        }
+
+        .project-card {
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 30px 60px rgba(139, 92, 246, 0.3);
+        }
+
+        .project-image {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+            z-index: 1;
+        }
+
+        .project-info {
+            padding: 2rem;
+        }
+
+        .project-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .project-info p {
+            color: #a1a1aa;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            padding: 0.8rem 1.5rem;
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--primary-color);
+            text-decoration: none;
+            border-radius: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Testimonials Section */
+        .testimonials-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonial {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 25px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .testimonial.active {
+            display: block;
+        }
+
+        .testimonial-text {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: #a1a1aa;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .author-info h4 {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .author-info p {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        /* Review Section - REVISED */
+        .review-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .review-form-container {
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 25px;
+            padding: 2.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .review-form-container h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 15px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #6b7280;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .rating-star {
+            font-size: 1.5rem;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .rating-star:hover,
+        .rating-star.active {
+            color: #fbbf24;
+            transform: scale(1.1);
+        }
+
+        .anonymous-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .anonymous-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-color);
+        }
+
+        .anonymous-label {
+            color: #a1a1aa;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .submit-review-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            width: 100%;
+        }
+
+        .submit-review-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
+        }
+
+        .reviews-display-container {
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 25px;
+            padding: 2.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .reviews-display-container h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .reviews-list {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .reviews-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .reviews-list::-webkit-scrollbar-track {
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 4px;
+        }
+
+        .reviews-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        .review-item {
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .author-name {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .review-date {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .review-rating {
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+
+        .review-text {
+            color: #a1a1aa;
+            line-height: 1.6;
+        }
+
+        /* Viewers Section */
+        .viewers-container {
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 25px;
+            padding: 2.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            margin-top: 3rem;
+        }
+
+        .viewers-container h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .viewers-stats {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #a1a1aa;
+            font-size: 1rem;
+        }
+
+        .viewers-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .viewers-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .viewers-list::-webkit-scrollbar-track {
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 4px;
+        }
+
+        .viewers-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        .viewer-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .viewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .viewer-info {
+            flex: 1;
+        }
+
+        .viewer-name {
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 0.2rem;
+        }
+
+        .viewer-date {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .viewer-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-online {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .status-offline {
+            background: rgba(107, 114, 128, 0.2);
+            color: #6b7280;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-form {
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            margin-top: 2rem;
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .contact-form .form-group label {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .contact-form .form-group input,
+        .contact-form .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 15px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-form .form-group input::placeholder,
+        .contact-form .form-group textarea::placeholder {
+            color: #6b7280;
+        }
+
+        .contact-form .form-group input:focus,
+        .contact-form .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        .contact-form .form-group textarea {
+            resize: vertical;
+            height: 120px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Video Section */
+        .video-container {
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            background: #000;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        }
+
+        .video-thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://img.youtube.com/vi/-u3vE84Wo_U/maxresdefault.jpg');
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(139, 92, 246, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .video-play-button:hover {
+            background: var(--primary-color);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .video-play-button i {
+            color: white;
+            font-size: 2rem;
+            margin-left: 5px;
+        }
+
+        .video-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 10, 0.8);
+            padding: 2rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .footer-text {
+            color: #a1a1aa;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .home-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .profile-circle {
+                width: 350px;
+                height: 350px;
+            }
+
+            .text-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav a {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .section {
+                padding: 4rem 2rem 2rem;
+            }
+
+            .projects-grid,
+            .skills-grid,
+            .skill-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .theme-switcher {
+                right: 10px;
+                top: 80px;
+            }
+
+            .popup-content {
+                padding: 2rem;
+            }
+
+            .project-popup-content {
+                height: 95vh;
+                max-height: 800px;
+            }
+
+            .project-popup-header {
+                padding: 1rem;
+            }
+
+            .project-popup-title {
+                font-size: 1.4rem;
+            }
+
+            .project-iframe {
+                height: 600px;
+            }
+
+            .zoom-controls {
+                display: none;
+            }
+
+            .review-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animation utilities */
+        .fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Floating particles -->
+    <div class="particles"></div>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button class="theme-toggle-btn" id="themeToggle">
+            <i class="fas fa-palette"></i>
+        </button>
+        <div class="theme-options">
+            <button class="theme-btn default active" data-theme="default" title="Purple"></button>
+            <button class="theme-btn ocean" data-theme="ocean" title="Ocean"></button>
+            <button class="theme-btn sunset" data-theme="sunset" title="Sunset"></button>
+            <button class="theme-btn forest" data-theme="forest" title="Forest"></button>
+            <button class="theme-btn rose" data-theme="rose" title="Rose"></button>
+            <button class="theme-btn galaxy" data-theme="galaxy" title="Galaxy"></button>
+        </div>
+    </div>
+
+    <!-- Social Media Popups -->
+    <div class="social-popup" id="whatsappPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('whatsappPopup')">×</button>
+            <div class="popup-icon whatsapp">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <h3>WhatsApp</h3>
+            <div class="popup-info">
+                <div class="popup-info-item">
+                    <i class="fas fa-user"></i>
+                    <span>Nama: Muhammad Ali Sallahudin</span>
+                </div>
+                <div class="popup-info-item">
+                    <i class="fas fa-phone"></i>
+                    <span>Nomor: +62 895-6294-31200</span>
+                </div>
+                <div class="popup-info-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Hubungi untuk diskusi proyek atau kolaborasi</span>
+                </div>
+            </div>
+            <div class="popup-actions">
+                <a href="https://wa.me/62895629431200" target="_blank" class="popup-btn primary">
+                    <i class="fab fa-whatsapp"></i> Buka WhatsApp
+                </a>
+                <button class="popup-btn secondary" onclick="closePopup('whatsappPopup')">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="social-popup" id="instagramPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('instagramPopup')">×</button>
+            <div class="popup-icon instagram">
+                <i class="fab fa-instagram"></i>
+            </div>
+            <h3>Instagram</h3>
+            <div class="popup-info">
+                <div class="popup-info-item">
+                    <i class="fas fa-user"></i>
+                    <span>Username: @dizz.back</span>
+                </div>
+                <div class="popup-info-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Follow untuk update terbaru dan konten menarik</span>
+                </div>
+            </div>
+            <div class="popup-actions">
+                <a href="https://instagram.com/dizz.back" target="_blank" class="popup-btn primary">
+                    <i class="fab fa-instagram"></i> Buka Instagram
+                </a>
+                <button class="popup-btn secondary" onclick="closePopup('instagramPopup')">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="social-popup" id="tiktokPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('tiktokPopup')">×</button>
+            <div class="popup-icon tiktok">
+                <i class="fab fa-tiktok"></i>
+            </div>
+            <h3>TikTok</h3>
+            <div class="popup-info">
+                <div class="popup-info-item">
+                    <i class="fas fa-user"></i>
+                    <span>Username: @dizzback</span>
+                </div>
+                <div class="popup-info-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Lihat video-video menarik dan konten kreatif</span>
+                </div>
+            </div>
+            <div class="popup-actions">
+                <a href="https://tiktok.com/@dizzback" target="_blank" class="popup-btn primary">
+                    <i class="fab fa-tiktok"></i> Buka TikTok
+                </a>
+                <button class="popup-btn secondary" onclick="closePopup('tiktokPopup')">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="social-popup" id="telegramPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('telegramPopup')">×</button>
+            <div class="popup-icon telegram">
+                <i class="fab fa-telegram"></i>
+            </div>
+            <h3>Telegram</h3>
+            <div class="popup-info">
+                <div class="popup-info-item">
+                    <i class="fas fa-user"></i>
+                    <span>Username: @Alzzzlenathea</span>
+                </div>
+                <div class="popup-info-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Chat untuk komunikasi cepat dan personal</span>
+                </div>
+            </div>
+            <div class="popup-actions">
+                <a href="https://t.me/Alzzzlenathea" target="_blank" class="popup-btn primary">
+                    <i class="fab fa-telegram"></i> Buka Telegram
+                </a>
+                <button class="popup-btn secondary" onclick="closePopup('telegramPopup')">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Demo Popups -->
+    <div class="project-popup" id="snakeGamePopup">
+        <div class="project-popup-content">
+            <div class="project-popup-header">
+                <h3 class="project-popup-title">Game Ular (Snake Game)</h3>
+                <div class="project-popup-controls">
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" onclick="zoomOut('snakeGamePopup')">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="zoom-level" id="snakeGameZoom">100%</span>
+                        <button class="zoom-btn" onclick="zoomIn('snakeGamePopup')">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="zoom-btn" onclick="resetZoom('snakeGamePopup')">
+                            <i class="fas fa-compress"></i>
+                        </button>
+                    </div>
+                    <button class="project-popup-close" onclick="closeProjectPopup('snakeGamePopup')">×</button>
+                </div>
+            </div>
+            <div class="project-demo-container">
+                <div class="project-iframe-wrapper" id="snakeGamePopupWrapper">
+                    <iframe src="https://game-ular-iota.vercel.app" class="project-iframe"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="project-popup" id="restaurantPopup">
+        <div class="project-popup-content">
+            <div class="project-popup-header">
+                <h3 class="project-popup-title">Restoran Lenathea Website</h3>
+                <div class="project-popup-controls">
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" onclick="zoomOut('restaurantPopup')">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="zoom-level" id="restaurantZoom">100%</span>
+                        <button class="zoom-btn" onclick="zoomIn('restaurantPopup')">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="zoom-btn" onclick="resetZoom('restaurantPopup')">
+                            <i class="fas fa-compress"></i>
+                        </button>
+                    </div>
+                    <button class="project-popup-close" onclick="closeProjectPopup('restaurantPopup')">×</button>
+                </div>
+            </div>
+            <div class="project-demo-container">
+                <div class="project-iframe-wrapper" id="restaurantPopupWrapper">
+                    <iframe src="https://restoran-alzzzlenathea.vercel.app" class="project-iframe"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="project-popup" id="calculatorPopup">
+        <div class="project-popup-content">
+            <div class="project-popup-header">
+                <h3 class="project-popup-title">Calculator App</h3>
+                <div class="project-popup-controls">
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" onclick="zoomOut('calculatorPopup')">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="zoom-level" id="calculatorZoom">100%</span>
+                        <button class="zoom-btn" onclick="zoomIn('calculatorPopup')">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="zoom-btn" onclick="resetZoom('calculatorPopup')">
+                            <i class="fas fa-compress"></i>
+                        </button>
+                    </div>
+                    <button class="project-popup-close" onclick="closeProjectPopup('calculatorPopup')">×</button>
+                </div>
+            </div>
+            <div class="project-demo-container">
+                <div class="project-iframe-wrapper" id="calculatorPopupWrapper">
+                    <iframe src="https://kalkulator-suara.vercel.app" class="project-iframe"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <ul>
+            <li><a href="#home" class="nav-link active">HOME</a></li>
+            <li><a href="#about" class="nav-link">ABOUT</a></li>
+            <li><a href="#skills" class="nav-link">SKILLS</a></li>
+            <li><a href="#projects" class="nav-link">PROJECTS</a></li>
+            <li><a href="#testimonials" class="nav-link">TESTIMONIALS</a></li>
+            <li><a href="#review" class="nav-link">REVIEW</a></li>
+            <li><a href="#video" class="nav-link">VIDEO</a></li>
+            <li><a href="#contact" class="nav-link">CONTACT</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="section">
+        <div class="container">
+            <div class="home-content">
+                <div class="text-content fade-in-up">
+                    <h1>Hello<br>I'M MUHAMMAD ALI<br>SALLAHUDIN</h1>
+                    <p><span class="highlight">Student</span> at SMK INFOKOM KOTA BOGOR<br>Passionate about <span
+                            class="highlight">Programming</span> and <span class="highlight">Technology</span></p>
+
+                    <div class="cta-buttons">
+                        <a href="#about" class="cta-button">
+                            Let's Explore <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="#contact" class="cta-button secondary">
+                            Get In Touch <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+
+                    <div class="social-links">
+                        <a onclick="openPopup('whatsappPopup')" class="social-link">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a onclick="openPopup('instagramPopup')" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a onclick="openPopup('tiktokPopup')" class="social-link">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a onclick="openPopup('telegramPopup')" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="profile-image fade-in-up">
+                    <div class="profile-circle">
+                        <img src="https://z-cdn-media.chatglm.cn/files/b61e75e6-2c79-4fa4-8b35-b4cd0402abf2_IMG-20250925-WA0011.jpg?auth_key=1790318092-6d9c6853a84a4c8d9b5a9a9d0004e92f-0-0a6605b7ec27058cc7694bb89168dcef"
+                            alt="Muhammad Ali Sallahudin" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="about-content">
+                <div class="section-header fade-in-up">
+                    <h2>About Me</h2>
+                    <p>Mengenal lebih dekat tentang perjalanan saya</p>
+                </div>
+
+                <div class="quote fade-in-up">
+                    "Belajar adalah jembatan menuju masa depan yang cerah"
+                </div>
+
+                <div class="about-text fade-in-up">
+                    <p>Saya adalah siswa SMK INFOKOM Kota Bogor yang sedang mendalami dunia teknologi dan pemrograman.
+                        Dengan semangat belajar yang tinggi, saya terus mengembangkan kemampuan di bidang teknologi
+                        informasi
+                        dan komunikasi. Meskipun masih dalam tahap pembelajaran, saya memiliki antusiasme yang besar
+                        untuk
+                        terus berkembang dan berkontribusi dalam dunia teknologi.</p>
+                    <br>
+                    <p>Di SMK INFOKOM, saya mempelajari berbagai aspek teknologi mulai dari pemrograman, desain,
+                        hingga pengembangan web. Saya percaya bahwa dengan dedikasi dan kerja keras, setiap impian
+                        dapat diwujudkan. Mari berkenalan lebih lanjut!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <h2>Skills & Expertise</h2>
+                <p>Teknologi dan tools yang saya kuasai</p>
+            </div>
+
+            <div class="skills-grid fade-in-up">
+                <div class="skill-icon">
+                    <i class="fab fa-html5"></i>
+                </div>
+                <div class="skill-icon">
+                    <i class="fab fa-css3-alt"></i>
+                </div>
+                <div class="skill-icon">
+                    <i class="fab fa-js-square"></i>
+                </div>
+                <div class="skill-icon">
+                    <i class="fab fa-python"></i>
+                </div>
+                <div class="skill-icon">
+                    <i class="fab fa-java"></i>
+                </div>
+                <div class="skill-icon">
+                    <i class="fab fa-figma"></i>
+                </div>
+                <div class="skill-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div class="skill-icon">
+                    <i class="fab fa-github"></i>
+                </div>
+            </div>
+
+            <div class="skill-cards fade-in-up">
+                <div class="skill-card">
+                    <h3><i class="fas fa-code"></i> Programming</h3>
+                    <p>Sedang mempelajari berbagai bahasa pemrograman seperti Python, Java, JavaScript, dan HTML/CSS.
+                        Fokus pada pengembangan logika pemrograman dan pemecahan masalah dengan pendekatan yang efisien.
+                    </p>
+                </div>
+
+                <div class="skill-card">
+                    <h3><i class="fas fa-palette"></i> UI/UX Design</h3>
+                    <p>Mempelajari dasar-dasar desain UI/UX menggunakan tools seperti Figma.
+                        Memahami prinsip-prinsip desain yang baik, user experience, dan interface yang intuitif.</p>
+                </div>
+
+                <div class="skill-card">
+                    <h3><i class="fas fa-globe"></i> Web Development</h3>
+                    <p>Sedang belajar membangun website responsif menggunakan HTML, CSS, dan JavaScript.
+                        Memahami konsep frontend development dan mulai mempelajari backend technologies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <h2>My Projects</h2>
+                <p>Karya dan proyek yang telah saya buat</p>
+            </div>
+
+            <div class="projects-grid fade-in-up">
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://z-cdn-media.chatglm.cn/files/500ad90f-aa17-4a32-8cb1-4de3f48b2e6d_IMG-20250930-WA0020.jpg?auth_key=1790741189-e5ca988bd10d4553b27633fbf61aca03-0-db62b3c7b78aaac0cea54f20460bbba3"
+                            alt="Snake Game Project">
+                    </div>
+                    <div class="project-info">
+                        <h3>Game Ular (Snake Game)</h3>
+                        <p>Proyek kolaborasi dengan teman Diata dan Rama untuk membuat game klasik Snake menggunakan
+                            JavaScript.
+                            Game ini dilengkapi dengan sistem scoring dan increasing difficulty.</p>
+                        <div class="project-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">HTML5 Canvas</span>
+                            <span class="tag">CSS3</span>
+                        </div>
+                        <div class="project-links">
+                            <a onclick="openProjectPopup('snakeGamePopup')" class="project-link">
+                                <i class="fas fa-play"></i> Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://z-cdn-media.chatglm.cn/files/69d29f8b-9923-4fdf-acde-0a366a2f72a0_IMG-20250930-WA0011~2.jpg?auth_key=1790740114-02a4dd71aa0d4ffcbc29b5e1cfff015a-0-342c82e53aeefb32c38007ce773712ee"
+                            alt="Portfolio Website Project">
+                    </div>
+                    <div class="project-info">
+                        <h3>Portfolio Website</h3>
+                        <p>Website portfolio personal yang responsive dan modern dengan animasi CSS yang smooth.
+                            Menampilkan profile, skills, projects, dan contact information.</p>
+                        <div class="project-tags">
+                            <span class="tag">HTML5</span>
+                            <span class="tag">CSS3</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">Responsive</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#home" class="project-link">
+                                <i class="fas fa-external-link-alt"></i> View
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://z-cdn-media.chatglm.cn/files/4c57cf1c-000b-4b48-9b94-f61e5e772cb3_IMG-20250930-WA0013~2.jpg?auth_key=1790740114-93dbc2b900db4545953e800a8bc2c4f7-0-53ba697534deca34d37506046f2dcc50"
+                            alt="Restoran Lenathea Website">
+                    </div>
+                    <div class="project-info">
+                        <h3>Restoran Lenathea Website</h3>
+                        <p>Web Restoran Online Yang Bisa Anda Kunjungi Dan Bisa Memesan Di Menu Yang Ada.</p>
+                        <div class="project-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">Responsive</span>
+                            <span class="tag">HTML5</span>
+                        </div>
+                        <div class="project-links">
+                            <a onclick="openProjectPopup('restaurantPopup')" class="project-link">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <img src="https://z-cdn-media.chatglm.cn/files/fd7687f2-3982-4fd4-b098-7ce5d6612956_IMG-20250930-WA0021.jpg?auth_key=1790741189-47400f88e27445889f887c19df5b7e69-0-a2a40ac0b60f5f4f13f7870b1c66b909"
+                            alt="Calculator App Project">
+                    </div>
+                    <div class="project-info">
+                        <h3>Calculator App</h3>
+                        <p>Aplikasi kalkulator sederhana dengan interface yang clean dan responsive.
+                            Mendukung operasi matematika dasar dengan keyboard shortcuts.</p>
+                        <div class="project-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">CSS Grid</span>
+                            <span class="tag">Local Storage</span>
+                        </div>
+                        <div class="project-links">
+                            <a onclick="openProjectPopup('calculatorPopup')" class="project-link">
+                                <i class="fas fa-play"></i> Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="section">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <h2>Testimonials</h2>
+                <p>Apa kata mereka tentang saya</p>
+            </div>
+
+            <div class="testimonials-slider fade-in-up">
+                <div class="testimonial active">
+                    <div class="testimonial-text">
+                        "Bekerja dengan Ali adalah pengalaman yang luar biasa. Dia sangat teliti, kreatif, dan
+                        selalu tepat waktu. Proyek kami selesai lebih cepat dari jadwal!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AF</div>
+                        <div class="author-info">
+                            <h4>Sacko Ousmane</h4>
+                            <p>Founder, DigitalCreative</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        "Ali memiliki dedikasi tinggi dalam belajar dan mengembangkan skill programmingnya.
+                        Sebagai teman satu tim, dia sangat reliable dan mudah diajak bekerja sama."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">DR</div>
+                        <div class="author-info">
+                            <h4>Diata & Rama</h4>
+                            <p>Teammate, Snake Game Project</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial">
+                    <div class="testimonial-text">
+                        "Siswa yang sangat antusias dan memiliki potensi besar di bidang teknologi.
+                        Ali selalu aktif bertanya dan mencari solusi kreatif untuk setiap challenge."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">PS</div>
+                        <div class="author-info">
+                            <h4>Bu Etika</h4>
+                            <p>Mantan Guru, SMP BINA SEJAHTERA</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-dots">
+                <span class="dot active" data-slide="0"></span>
+                <span class="dot" data-slide="1"></span>
+                <span class="dot" data-slide="2"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Review Section - REVISED -->
+    <section id="review" class="section">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <h2>Reviews & Viewers</h2>
+                <p>Berikan ulasan Anda dan lihat siapa saja yang telah mengunjungi portfolio ini</p>
+            </div>
+
+            <div class="review-content fade-in-up">
+                <!-- Left Side: Review Form -->
+                <div class="review-form-container">
+                    <h3>Tinggalkan Review Anda</h3>
+                    <form id="reviewForm">
+                        <div class="form-group">
+                            <label for="reviewName">Nama</label>
+                            <input type="text" id="reviewName" name="reviewName" placeholder="Nama Anda (opsional)">
+                        </div>
+                        <div class="form-group">
+                            <label>Rating</label>
+                            <div class="rating-group">
+                                <i class="fas fa-star rating-star" data-rating="1"></i>
+                                <i class="fas fa-star rating-star" data-rating="2"></i>
+                                <i class="fas fa-star rating-star" data-rating="3"></i>
+                                <i class="fas fa-star rating-star" data-rating="4"></i>
+                                <i class="fas fa-star rating-star" data-rating="5"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reviewText">Ulasan</label>
+                            <textarea id="reviewText" name="reviewText" placeholder="Bagikan pengalaman Anda..."
+                                required></textarea>
+                        </div>
+                        <div class="anonymous-group">
+                            <input type="checkbox" id="anonymousCheck" class="anonymous-checkbox">
+                            <label for="anonymousCheck" class="anonymous-label">Tampilkan sebagai anonim</label>
+                        </div>
+                        <button type="submit" class="submit-review-btn">
+                            Kirim Review <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right Side: Reviews List -->
+                <div class="reviews-display-container">
+                    <h3>Ulasan Baru</h3>
+                    <div class="reviews-list" id="reviewsList">
+                        <!-- Reviews will be dynamically added here -->
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="review-author">
+                                    <div class="author-avatar-small">SR</div>
+                                    <div>
+                                        <div class="author-name">Simon Riley</div>
+                                        <div class="review-date">2 hari yang lalu</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="review-text">
+                                Portfolio yang sangat menarik! Desainnya modern dan profesional. Sangat menginspirasi
+                                untuk melihat karya-karya yang dibuat oleh seorang pelajar SMK.
+                            </div>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="review-author">
+                                    <div class="author-avatar-small">S</div>
+                                    <div>
+                                        <div class="author-name">Sandman</div>
+                                        <div class="review-date">1 minggu yang lalu</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <div class="review-text">
+                                Proyek-proyek yang ditampilkan sangat kreatif. Saya terkesan dengan game ular yang
+                                dibuat. Terus berkembang dan jangan berhenti belajar!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Viewers Section -->
+            <div class="viewers-container">
+                <h3>Statistik Pengunjung</h3>
+                <div class="viewers-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalViews">1,247</div>
+                        <div class="stat-label">Total Kunjungan</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="todayViews">42</div>
+                        <div class="stat-label">Hari Ini</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="uniqueViewers">856</div>
+                        <div class="stat-label">Pengunjung Unik</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--primary-color);">Pengunjung Terbaru</h3>
+                <div class="viewers-list" id="viewersList">
+                    <!-- Viewers will be dynamically added here -->
+                    <div class="viewer-item">
+                        <div class="viewer-avatar">V</div>
+                        <div class="viewer-info">
+                            <div class="viewer-name">Veeronica</div>
+                            <div class="viewer-date">Hari ini, 14:30</div>
+                        </div>
+                        <div class="viewer-status status-online">Online</div>
+                    </div>
+
+                    <div class="viewer-item">
+                        <div class="viewer-avatar">SR</div>
+                        <div class="viewer-info">
+                            <div class="viewer-name">Simon Riley</div>
+                            <div class="viewer-date">Hari ini, 12:15</div>
+                        </div>
+                        <div class="viewer-status status-offline">Offline</div>
+                    </div>
+
+                    <div class="viewer-item">
+                        <div class="viewer-avatar">S</div>
+                        <div class="viewer-info">
+                            <div class="viewer-name">Sandman</div>
+                            <div class="viewer-date">Kemarin, 18:45</div>
+                        </div>
+                        <div class="viewer-status status-offline">Offline</div>
+                    </div>
+
+                    <div class="viewer-item">
+                        <div class="viewer-avatar">MA</div>
+                        <div class="viewer-info">
+                            <div class="viewer-name">Mas Amba</div>
+                            <div class="viewer-date">Kemarin, 10:20</div>
+                        </div>
+                        <div class="viewer-status status-online">Online</div>
+                    </div>
+
+                    <div class="viewer-item">
+                        <div class="viewer-avatar">G1</div>
+                        <div class="viewer-info">
+                            <div class="viewer-name">Guest1337</div>
+                            <div class="viewer-date">2 hari yang lalu, 16:30</div>
+                        </div>
+                        <div class="viewer-status status-offline">Offline</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section id="video" class="section">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <h2>Video Profile</h2>
+                <p>Belajar Programming dan Teknologi</p>
+            </div>
+
+            <div class="video-container fade-in-up">
+                <div class="video-wrapper">
+                    <div class="video-thumbnail" id="videoThumbnail">
+                        <div class="video-play-button" id="playButton">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <iframe class="video-iframe" id="videoIframe" 
+                        src="" 
+                        title="Modern Web Development Tutorial"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <div class="contact-content">
+                <div class="section-header fade-in-up">
+                    <h2>Get In Touch</h2>
+                    <p>Ada proyek menarik atau ingin berkolaborasi? Jangan ragu untuk menghubungi saya!</p>
+                </div>
+
+                <div class="contact-form fade-in-up">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Nama</label>
+                            <input type="text" id="name" name="name" placeholder="Nama lengkap Anda" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="email@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subjek</label>
+                            <input type="text" id="subject" name="subject" placeholder="Subjek pesan" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Pesan</label>
+                            <textarea id="message" name="message" placeholder="Tulis pesan Anda di sini..."
+                                required></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            Kirim Pesan <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-text">
+            Thank You For Visiting - Muhammad Ali Sallahudin © 2025
+        </div>
+    </footer>
+
+    <script>
+        // Initialize localStorage data
+        if (!localStorage.getItem('portfolioReviews')) {
+            localStorage.setItem('portfolioReviews', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('portfolioViewers')) {
+            localStorage.setItem('portfolioViewers', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('portfolioStats')) {
+            localStorage.setItem('portfolioStats', JSON.stringify({
+                totalViews: 1247,
+                todayViews: 42,
+                uniqueViewers: 856
+            }));
+        }
+
+        // Track current visitor
+        function trackVisitor() {
+            const stats = JSON.parse(localStorage.getItem('portfolioStats') || '{}');
+            const viewers = JSON.parse(localStorage.getItem('portfolioViewers') || '[]');
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const visitorId = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+            // Update stats
+            stats.totalViews = (stats.totalViews || 0) + 1;
+            stats.todayViews = (stats.todayViews || 0) + 1;
+            stats.uniqueViewers = (stats.uniqueViewers || 0) + 1;
+
+            // Add to viewers list
+            viewers.unshift({
+                id: visitorId,
+                name: 'Pengunjung ' + (viewers.length + 1),
+                date: formatDateTime(now),
+                status: 'online',
+                initials: generateInitials('Pengunjung ' + (viewers.length + 1))
+            });
+
+            // Keep only last 20 viewers
+            if (viewers.length > 20) {
+                viewers.pop();
+            }
+
+            // Save to localStorage
+            localStorage.setItem('portfolioStats', JSON.stringify(stats));
+            localStorage.setItem('portfolioViewers', JSON.stringify(viewers));
+
+            // Update display
+            updateViewersDisplay();
+        }
+
+        // Generate initials from name
+        function generateInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').toUpperCase().substr(0, 2);
+        }
+
+        // Format date and time
+        function formatDateTime(date) {
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            if (date.toDateString() === today.toDateString()) {
+                return `Hari ini, ${hours}:${minutes}`;
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return `Kemarin, ${hours}:${minutes}`;
+            } else {
+                return `${date.getDate()} hari yang lalu, ${hours}:${minutes}`;
+            }
+        }
+
+        // Update viewers display
+        function updateViewersDisplay() {
+            const stats = JSON.parse(localStorage.getItem('portfolioStats') || '{}');
+            const viewers = JSON.parse(localStorage.getItem('portfolioViewers') || '[]');
+
+            // Update stats
+            document.getElementById('totalViews').textContent = (stats.totalViews || 0).toLocaleString();
+            document.getElementById('todayViews').textContent = stats.todayViews || 0;
+            document.getElementById('uniqueViewers').textContent = (stats.uniqueViewers || 0).toLocaleString();
+
+            // Update viewers list
+            const viewersList = document.getElementById('viewersList');
+            viewersList.innerHTML = '';
+
+            viewers.slice(0, 5).forEach(viewer => {
+                const viewerItem = document.createElement('div');
+                viewerItem.className = 'viewer-item';
+                viewerItem.innerHTML = `
+<div class="viewer-avatar">${viewer.initials}</div>
+<div class="viewer-info">
+<div class="viewer-name">${viewer.name}</div>
+<div class="viewer-date">${viewer.date}</div>
+</div>
+<div class="viewer-status ${viewer.status === 'online' ? 'status-online' : 'status-offline'}">${viewer.status === 'online' ? 'Online' : 'Offline'}</div>
+`;
+                viewersList.appendChild(viewerItem);
+            });
+        }
+
+        // Update reviews display
+        function updateReviewsDisplay() {
+            const reviews = JSON.parse(localStorage.getItem('portfolioReviews') || '[]');
+            const reviewsList = document.getElementById('reviewsList');
+            reviewsList.innerHTML = '';
+
+            // Add existing reviews first
+            const existingReviews = [
+                {
+                    name: 'Simon Riley',
+                    initials: 'SR',
+                    date: '2 hari yang lalu',
+                    rating: 5,
+                    text: 'Portfolio yang sangat menarik! Desainnya modern dan profesional. Sangat menginspirasi untuk melihat karya-karya yang dibuat oleh seorang pelajar SMK.'
+                },
+                {
+                    name: 'Sandman',
+                    initials: 'S',
+                    date: '1 minggu yang lalu',
+                    rating: 5,
+                    text: 'Proyek-proyek yang ditampilkan sangat kreatif. Saya terkesan dengan game ular yang dibuat. Terus berkembang dan jangan berhenti belajar!'
+                }
+            ];
+
+            // Add existing reviews
+            existingReviews.forEach(review => {
+                addReviewToDisplay(review);
+            });
+
+            // Add user reviews
+            reviews.forEach(review => {
+                addReviewToDisplay(review);
+            });
+        }
+
+        // Add review to display
+        function addReviewToDisplay(review) {
+            const reviewsList = document.getElementById('reviewsList');
+            const reviewItem = document.createElement('div');
+            reviewItem.className = 'review-item';
+
+            let starsHTML = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < review.rating) {
+                    starsHTML += '<i class="fas fa-star"></i>';
+                } else {
+                    starsHTML += '<i class="far fa-star"></i>';
+                }
+            }
+
+            reviewItem.innerHTML = `
+<div class="review-header">
+<div class="review-author">
+<div class="author-avatar-small">${review.initials}</div>
+<div>
+<div class="author-name">${review.name}</div>
+<div class="review-date">${review.date}</div>
+</div>
+</div>
+</div>
+<div class="review-rating">
+ ${starsHTML}
+</div>
+<div class="review-text">
+ ${review.text}
+</div>
+`;
+
+            reviewsList.insertBefore(reviewItem, reviewsList.firstChild);
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.querySelector('.particles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Theme Switcher Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeSwitcher = document.querySelector('.theme-switcher');
+
+        themeToggle.addEventListener('click', function () {
+            themeSwitcher.classList.toggle('expanded');
+        });
+
+        // Close theme switcher when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!themeSwitcher.contains(e.target)) {
+                themeSwitcher.classList.remove('expanded');
+            }
+        });
+
+        // Theme Switcher
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        themeButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const theme = this.getAttribute('data-theme');
+
+                // Remove all theme classes
+                document.body.classList.remove('theme-ocean', 'theme-sunset', 'theme-forest', 'theme-rose', 'theme-galaxy');
+
+                // Add new theme class if not default
+                if (theme !== 'default') {
+                    document.body.classList.add('theme-' + theme);
+                }
+
+                // Update active button
+                themeButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                // Close theme switcher after selection
+                themeSwitcher.classList.remove('expanded');
+            });
+        });
+
+        // Social Media Popup Functions
+        function openPopup(popupId) {
+            const popup = document.getElementById(popupId);
+            if (popup) {
+                popup.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closePopup(popupId) {
+            const popup = document.getElementById(popupId);
+            if (popup) {
+                popup.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Project Popup Functions
+        function openProjectPopup(popupId) {
+            const popup = document.getElementById(popupId);
+            if (popup) {
+                popup.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeProjectPopup(popupId) {
+            const popup = document.getElementById(popupId);
+            if (popup) {
+                popup.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Zoom Controls for Project Popups
+        function zoomIn(popupId) {
+            const wrapper = document.getElementById(popupId + 'Wrapper');
+            const zoomLevel = document.getElementById(popupId.replace('Popup', 'Zoom'));
+            let currentZoom = parseInt(zoomLevel.textContent);
+            if (currentZoom < 150) {
+                currentZoom += 10;
+                wrapper.style.transform = `scale(${currentZoom / 100})`;
+                zoomLevel.textContent = currentZoom + '%';
+            }
+        }
+
+        function zoomOut(popupId) {
+            const wrapper = document.getElementById(popupId + 'Wrapper');
+            const zoomLevel = document.getElementById(popupId.replace('Popup', 'Zoom'));
+            let currentZoom = parseInt(zoomLevel.textContent);
+            if (currentZoom > 50) {
+                currentZoom -= 10;
+                wrapper.style.transform = `scale(${currentZoom / 100})`;
+                zoomLevel.textContent = currentZoom + '%';
+            }
+        }
+
+        function resetZoom(popupId) {
+            const wrapper = document.getElementById(popupId + 'Wrapper');
+            const zoomLevel = document.getElementById(popupId.replace('Popup', 'Zoom'));
+            wrapper.style.transform = 'scale(1)';
+            zoomLevel.textContent = '100%';
+        }
+
+        // Testimonial Slider
+        const testimonials = document.querySelectorAll('.testimonial');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            testimonials.forEach(testimonial => testimonial.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            testimonials[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => showSlide(index));
+        });
+
+        // Auto-rotate testimonials
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % testimonials.length;
+            showSlide(currentSlide);
+        }, 5000);
+
+        // Review Form Handling
+        const reviewForm = document.getElementById('reviewForm');
+        const ratingStars = document.querySelectorAll('.rating-star');
+        const anonymousCheckbox = document.getElementById('anonymousCheck');
+        const nameInput = document.getElementById('reviewName');
+        let selectedRating = 0;
+
+        ratingStars.forEach(star => {
+            star.addEventListener('click', function () {
+                selectedRating = parseInt(this.getAttribute('data-rating'));
+                updateRatingDisplay();
+            });
+
+            star.addEventListener('mouseenter', function () {
+                const hoverRating = parseInt(this.getAttribute('data-rating'));
+                updateRatingDisplay(hoverRating);
+            });
+        });
+
+        document.querySelector('.rating-group').addEventListener('mouseleave', function () {
+            updateRatingDisplay();
+        });
+
+        function updateRatingDisplay(rating = selectedRating) {
+            ratingStars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        reviewForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const reviewText = document.getElementById('reviewText').value;
+            const isAnonymous = anonymousCheckbox.checked;
+            const name = isAnonymous ? 'Anonim' : (nameInput.value || 'Anonim');
+
+            if (selectedRating === 0) {
+                alert('Silakan pilih rating');
+                return;
+            }
+
+            // Create new review
+            const newReview = {
+                name: name,
+                initials: generateInitials(name),
+                date: 'Baru saja',
+                rating: selectedRating,
+                text: reviewText,
+                isAnonymous: isAnonymous
+            };
+
+            // Save to localStorage
+            const reviews = JSON.parse(localStorage.getItem('portfolioReviews') || '[]');
+            reviews.unshift(newReview);
+            if (reviews.length > 50) reviews.pop(); // Keep only last 50 reviews
+            localStorage.setItem('portfolioReviews', JSON.stringify(reviews));
+
+            // Add to display
+            addReviewToDisplay(newReview);
+
+            // Update viewers if not anonymous
+            if (!isAnonymous && nameInput.value) {
+                const viewers = JSON.parse(localStorage.getItem('portfolioViewers') || '[]');
+                const existingViewer = viewers.find(v => v.name === name);
+                if (existingViewer) {
+                    existingViewer.status = 'online';
+                } else {
+                    viewers.unshift({
+                        id: 'reviewer_' + Date.now(),
+                        name: name,
+                        date: formatDateTime(new Date()),
+                        status: 'online',
+                        initials: generateInitials(name)
+                    });
+                }
+                localStorage.setItem('portfolioViewers', JSON.stringify(viewers));
+                updateViewersDisplay();
+            }
+
+            // Reset form
+            reviewForm.reset();
+            selectedRating = 0;
+            updateRatingDisplay();
+
+            // Show success message
+            alert('Terima kasih atas review Anda!');
+        });
+
+        // Navigation Active State
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Video player functionality
+        const videoThumbnail = document.getElementById('videoThumbnail');
+        const videoIframe = document.getElementById('videoIframe');
+        const playButton = document.getElementById('playButton');
+
+        playButton.addEventListener('click', function() {
+            // Hide thumbnail and show iframe
+            videoThumbnail.style.display = 'none';
+            videoIframe.style.display = 'block';
+            
+            // Set iframe src with autoplay parameter
+            videoIframe.src = 'https://www.youtube.com/embed/-u3vE84Wo_U?si=1SRkDXFaQ-mzVY2D&autoplay=1&rel=0&modestbranding=1';
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            trackVisitor();
+            updateViewersDisplay();
+            updateReviewsDisplay();
+        });
+    </script>
+</body>
+</html>
